@@ -273,25 +273,9 @@ $(document).ready(function () {
 <div id="reading-in-data-from-supplied-csv-files" class="section level2">
 <h2>Reading in Data from supplied CSV files</h2>
 <pre class="r"><code>library(tidyr)
-library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ──────────────────────────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.3     ✓ dplyr   1.0.6
-## ✓ tibble  3.1.1     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1
-## ✓ purrr   0.3.4</code></pre>
-<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(magrittr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;magrittr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     set_names</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     extract</code></pre>
-<pre class="r"><code>library(dplyr)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
 library(readr)
 library(knitr)
 
@@ -557,14 +541,8 @@ bb %&gt;%
 <h2>The below code filters the overall data set to only IPAs and Ales as well as imputes median values based on the style of the beer. We then created a KNN model to predict if a beer is an IPA or Ale based on IBU and ABV.</h2>
 <p>Using a KNN model, we were able to predict the style of beer with a 90.74% accuracy.</p>
 <pre class="r"><code>library(class)
-library(caret)</code></pre>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## 
-## Attaching package: &#39;caret&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     lift</code></pre>
-<pre class="r"><code>library(e1071)
+library(caret)
+library(e1071)
 
 set.seed(25)
 #Filter down to Ale&#39;s and IPA&#39;s
@@ -753,25 +731,10 @@ table(classification,bb_knn$IPA_Ale)</code></pre>
 <div id="code-chunk-12" class="section level1">
 <h1>Code Chunk 12</h1>
 <p>In the below code, we join to another US data set to plot a US heat map of the brewery count by state for easy analysis.</p>
-<pre class="r"><code>library(maps)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;maps&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     map</code></pre>
-<pre class="r"><code>library(plotly)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;plotly&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     last_plot</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
-<pre><code>## The following object is masked from &#39;package:graphics&#39;:
-## 
-##     layout</code></pre>
-<pre class="r"><code>#create heat map of breweries per state
+<pre class="r"><code>library(maps)
+library(plotly)
+
+#create heat map of breweries per state
 
 states_map = map_data(&quot;state&quot;)
 names(states_map)[5] = &#39;State_Name&#39;
