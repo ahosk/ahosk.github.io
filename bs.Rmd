@@ -1,0 +1,340 @@
+---
+output:
+  html_document: default
+---
+
+# Intro
+
+Mr. Doukeris and Mr. Tennenbaum, according to The Beer Institute on average the adult 21 and over consumes around 28.2 gallons of beer a year. Which equates to roughly a six pack of beer per week. During my analysis of the brewery data, I have found that on average each state has 11 breweries With the exception of California, Colorado, Michigan, Texas, and Oregon which contain over 28 breweries each. Colorado not only contains the most breweries with 47 total but also the biggest ABV at 12.8% while Oregon has the most bitter at 138 IBU which ranges from 0 to 140. We suggest that adding an additional breweries to Arizona, South Carolina, Indiana, and Maine would greatly impact beer sales to combat the ever growing microbrewery influx. According to the Associated Press, these states have seen the least amount of population decline of the the last year. Additions to California, Georgia, New York and Texas would also be beneficial due those states having a low brewery per 100k, with populations over 28mm people. While Texas and California have some of the highest number of breweries in total, they average less than .5 breweries per 100k. IPA's and Ale's consist of more 60% of the beers and continue to rise are the most common consumed beer in the United States. Additions of higher ABV beers such as IPAs to the Western and Southern Regions and additions of lower IBU beers such as Ales in the North Central and Northeast would increase sales as these align with the current selection in the area.
+ 
+Pertaining to beer classifications that were asked, we can accurately predict whether a beer is an Ale or an IPA based on the combination of IBU and ABV at a rate of almost 92% using a model based off of comparing similar beer components called k-nearest neighbor. When comparing to other commonly used models such as Naïve-Bayes it performed at a significantly better rate. 
+
+ 
+# Code Chunk 1:
+## Reading in Data from supplied CSV files
+```{r}
+library(tidyr)
+library(tidyverse)
+library(magrittr)
+library(dplyr)
+library(readr)
+library(knitr)
+
+#reading in data
+beers = read_csv('~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Beers.csv')
+breweries = read_csv('~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Breweries.csv')
+
+head(beers)
+head(breweries)
+
+```
+
+# Code Chunk 2:
+## The code below gives brief statistics on how many breweries are in each State as well as the average number of breweries per state.
+
+There are on average 11 breweries per state with 5 states having over 28 breweries each.
+```{r}
+breweries %>% count(State)
+#average number of breweries per state
+#creating brew object for quick analysis
+
+brew_cnt = breweries %>%
+   count(State) %>%
+   mutate(State = ifelse(State == 'DC','MD',State))
+brew_cnt
+
+#renaming column for better understanding
+names(brew_cnt)[2] = 'Brewery_Count'
+
+summary(brew_cnt$Brewery_Count)
+
+```
+
+# Code Chunck 3
+## This code chunk merges the two data frames together to create one usable file to analyze. To create one file, we had to update mismatching column names as well as update the DC record for State and Region information.
+```{r}
+#renaming columns to match as Brew_ID and Brewery_ID do not match
+names(beers)[1] = 'Beer_Name'
+names(beers)[5] = 'Brew_ID'
+#changing "Name" in brewery data set to "Brewery_Name" for easy analysis
+names(breweries)[2] = 'Brewery_Name'
+
+#defaulting DC "State" to Maryland for NA Values when joining to state Data Set
+breweries = breweries %>%
+   mutate(State = ifelse(State == 'DC','MD',State))
+
+#merging data sets
+bb = left_join(breweries,beers,by = NULL)
+
+#join to state on abbreviation for region
+#using state data set for region information
+state = data.frame(state.abb, tolower(state.name),  state.region, state.division)
+
+#renaming columns for merging 
+names(state)[1] = 'State'
+names(state)[2] = 'State_Name'
+names(state)[3] = 'Region'
+names(state)[4] = 'Division'
+
+#merging final data set with stat information
+bb = left_join(bb,state, by = NULL)
+
+#print first and last 6 rows in data set
+head(bb,6)
+tail(bb,6)
+
+```
+
+# Code Chunk 4
+## In this code chunk, we initially address Missing values. This will formally be addressed in a later code chunk in which we impute mean values for missing data.
+
+IBU,ABV and Style all have missing data points. IBU has over 40% NA values while ABV and Style are less than 5%.
+```{r}
+#missing values graph. Issues addressed in KNN classifier section
+library(naniar)
+colSums(is.na(bb))
+gg_miss_var(bb,show_pct = TRUE)
+
+```
+
+# Code Chunk 5
+## This code computes the median alcohol content and international bitterness unit for each state and plots them on a bar chart to easily compare across sates. We have included a 5 number summary to show the distribution across all states.
+
+Median ABV: 5.6%
+Median IBU: 35.00
+
+```{r}
+#bar chart of median ABV per state
+bb %>% filter(!is.na(ABV)) %>%
+   ggplot(aes(State, ABV, fill = Region)) +
+   geom_bar(stat = 'summary', fun = 'median') +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+   ggtitle('Median ABV Comparison by State')
+
+#5 number summary of ABV
+summary(bb$ABV)
+
+#bar chart of median IBU per state
+bb %>% filter(!is.na(IBU)) %>%
+   ggplot(aes(State, IBU, fill = Region)) +
+   geom_bar(stat = 'summary', fun= 'median') +
+   theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+   ggtitle('Median IBU Comparison by State')
+
+#5 number summary of IBU
+summary(bb$IBU)
+
+```
+
+
+# Code Chunk 6
+## In this code Chunk we determine which state has the maximum alcoholic (ABV) beer and which state has the beer with the highest IBU value.
+
+Colorado has the beer with the highest ABV of 12.8 from Upslope Brewing.
+Oregon has the beer with the highest IBU of 138 from Astoria Brewing.
+
+```{r}
+
+#finding record with maximum ABV
+bb[which.max(bb$ABV),]
+
+#finding record with maximum IBU
+bb[which.max(bb$IBU),]
+
+```
+
+# Code Chunk 7
+## This code chunk calculates the summary statistics of ABV and plots them broken out by Region.
+
+The ABVs of beers in the data set range from 0.1% to 12.8% with an average of 5.9%. The majority of the beers in each region range from 5% to 6.7%.
+```{r}
+
+#obtain summary statistics of ABV
+summary(bb$ABV)
+
+#box plot of ABV by region for analysis
+bb %>%
+   ggplot(aes(ABV,Region))+
+   geom_boxplot(aes(fill = Region))
+```
+
+
+# Code Chunk 8
+## The below code creates at scatter plot to calculate the correlation between IBU and ABV by region.
+
+There is a slight positive correlation between IBU and ABV. As ABV increases IBU increases as well.
+```{r}
+
+library(ggthemes)
+library(ggpubr)
+#creating a scatter plot for relationship between IBU and ABV
+#adding pearson correlation information to determine relationship
+#breaking out graph by Region
+bb %>%
+   ggplot(aes(ABV,IBU, color = Region)) +
+   geom_point(position = 'jitter')+
+   geom_smooth(method = 'lm')+
+   stat_cor(method="pearson", label.x = 0,label.y = 130)+
+   ggtitle('Correlation of IBU and IPA in Beer by Region')+
+   facet_wrap(~Region)+
+   theme_minimal()
+
+
+```
+
+# Code Chunk 9
+## The below code filters the overall data set to only IPAs and Ales as well as imputes median values based on the style of the beer. We then created a KNN model to predict if a beer is an IPA or Ale based on IBU and ABV.
+
+Using a KNN model, we were able to predict the style of beer with a 90.74% accuracy. 
+```{r}
+library(class)
+library(caret)
+library(e1071)
+
+set.seed(25)
+#Filter down to Ale's and IPA's
+bb_knn = bb %>%
+   filter(grepl('\\bAle\\b|\\bIPA\\b',Style,ignore.case = TRUE))
+
+#create IPA/Ale column for analysis
+bb_knn$IPA_Ale = as.character(ifelse(grepl('\\bIPA\\b',bb_knn$Style,ignore.case = TRUE),'IPA','Ale'))
+
+#fixing NA values in data set
+#find mean to impute for NA values 
+abv_mean = aggregate(ABV ~ IPA_Ale, bb_knn, mean)
+abv_mean
+ibu_mean = aggregate(IBU ~ IPA_Ale, bb_knn, mean)
+ibu_mean
+
+#mutate NA values from mean values
+bb_knn = bb_knn %>%
+   mutate(IBU = ifelse(IPA_Ale =='IPA', replace_na(IBU,ibu_mean[[2,2]]),replace_na(IBU,ibu_mean[[1,2]])))%>%
+   mutate(ABV = ifelse(IPA_Ale =='IPA', replace_na(ABV,abv_mean[[2,2]]),replace_na(ABV,abv_mean[[1,2]])))
+
+#check for NA values after imputation
+gg_miss_var(bb_knn,show_pct = TRUE)
+
+#standardize IBU and ABV for knn model
+bb_knn$Z_IBU = scale(bb_knn$IBU)
+bb_knn$Z_ABV = scale(bb_knn$ABV)
+
+
+#creation of KNN model using leave one out method
+classification = knn.cv(bb_knn[,c(15,16)],bb_knn$IPA_Ale,prob = TRUE, k = 10)
+table(classification,bb_knn$IPA_Ale)
+confusionMatrix(table(classification,bb_knn$IPA_Ale))
+
+```
+
+
+# Code Chunk 10
+## In this code chunk we run and additional predictive model called Naive Bayes to compare to our KNN model.
+
+To find the most accurate model, we compared against a Naive Bayes model which was slighly less accurate at predicting the beer style by 2%.
+```{r}
+#NAIVE BAYES model to compare to KNN
+#set seed for reproducible results
+set.seed(4)
+
+#creating a 70/30 split for train and test data sets
+trainIndices = sample(seq(1:length(bb_knn$IPA_Ale)),round(.7*length(bb_knn$IPA_Ale)))
+
+#creating test and train data sets
+train_nb = bb_knn[trainIndices,]
+test_nb = bb_knn[-trainIndices,]
+
+#running naive bayes model 
+model = naiveBayes(train_nb[,c(15,16)],train_nb$IPA_Ale)
+table(predict(model,test_nb[,c(15,16)]),test_nb$IPA_Ale)
+confusionMatrix(table(predict(model,test_nb[,c(15,16)]),test_nb$IPA_Ale))
+
+```
+
+# Code Chunk 11
+## In this code section, we run our previous KNN model 90 times to determine the best parameters for our model. 
+
+In this section we ran the model 90 times to get the best parameter for the model. When using the tuned model with a k=30 we were able to accurately predict the style 92% of the time.
+```{r}
+
+set.seed(25)
+#running KNN model 90 times to find best k parameter 
+accs = data.frame(accuracy = numeric(90), k = numeric(90))
+
+for(i in 1:90)
+{
+   classification = knn.cv(bb_knn[,c(15,16)],bb_knn$IPA_Ale,prob = TRUE, k = i)
+   table(classification,bb_knn$IPA_Ale)
+   CM = confusionMatrix(table(classification,bb_knn$IPA_Ale))
+  accs$accuracy[i] = CM$overall[1]
+  accs$k[i] = i
+}
+
+plot(accs$k,accs$accuracy, type = "l", xlab = "k")
+abline(v=accs$k[which.max(accs$accuracy)], col="red")
+accs$k[which.max(accs$accuracy)]
+
+set.seed(25)
+#use tuned parameter from code above
+classification = knn.cv(bb_knn[,c(15,16)],bb_knn$IPA_Ale,prob = TRUE, k = 30)
+table(classification,bb_knn$IPA_Ale)
+confusionMatrix(table(classification,bb_knn$IPA_Ale))
+
+```
+
+# Code Chunk 12
+In the below code, we join to another US data set to plot a US heat map of the brewery count by state for easy analysis.
+``` {r}
+library(maps)
+library(plotly)
+
+#create heat map of breweries per state
+
+states_map = map_data("state")
+names(states_map)[5] = 'State_Name'
+states_map = left_join(states_map,state,by=NULL)
+states_map = left_join(breweries, states_map, by = NULL)
+states_map
+
+
+states_map
+state_heat = left_join(state,brew_cnt, by = NULL)
+
+
+#merging brewery count to map data
+states_map = left_join(states_map,state_heat,by= NULL)
+states_map
+
+
+states_map %>%
+   ggplot(aes(x=long,y=lat,group=group))+
+   geom_polygon(aes(fill = Brewery_Count))+
+   geom_path()+ 
+   scale_fill_gradientn(colours=rev(heat.colors(10)),na.value="grey90")+
+   ggtitle("Breweries by State")+
+   labs(color='Number of Breweries')+
+   coord_map('bonne',parameters = 41.6)+
+   theme(axis.text= element_blank(),
+         axis.title = element_blank(),
+         axis.ticks = element_blank())
+
+```
+
+#Code Chuck 13
+This code creates a bar graph of the number of breweries in each state ordered descending
+```{r}
+
+#creates bar chart for brewery count in each state
+#filtering out duplicate MD row
+brew_cnt_bar = left_join(brew_cnt,state,by=NULL)
+brew_cnt_bar =brew_cnt_bar %>% filter(State !='MD'|Brewery_Count != 1)
+
+
+brew_cnt_bar %>%
+   ggplot(aes(Brewery_Count,reorder(State,Brewery_Count),fill = Region)) +
+   geom_col()+
+   ggtitle('Number of Breweries in Each State')+
+   xlab('Number of Breweries')+
+   ylab('State')+
+   geom_text(aes(label=Brewery_Count),hjust=1)
+
+```
