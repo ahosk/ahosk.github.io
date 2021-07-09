@@ -1,0 +1,8 @@
+name: "my-website"
+navbar:
+  title: "Allen Hoskins - Portfolio"
+  left:
+    - text: "About Me"
+      href: index.html
+    - text: "Beer Study"
+      href: bs.html
