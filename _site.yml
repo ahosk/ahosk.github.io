@@ -8,3 +8,6 @@ navbar:
       href: abroad.html
     - text: "Beer Study"
       href: bs.html
+output:
+html_document:
+  theme: lux
