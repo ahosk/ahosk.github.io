@@ -11,5 +11,3 @@ navbar:
     - text: "Attrition Study"
       href: AttritionCS.html
 output:
-html_document:
-  theme: lux
