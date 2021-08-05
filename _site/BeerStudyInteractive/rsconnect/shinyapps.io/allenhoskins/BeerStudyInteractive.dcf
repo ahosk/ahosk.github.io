@@ -1,0 +1,13 @@
+name: BeerStudyInteractive
+title: BeerStudyInteractive
+username:
+account: allenhoskins
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4369873
+bundleId: 4813458
+url: https://allenhoskins.shinyapps.io/BeerStudyInteractive/
+when: 1626144710.50896
+lastSyncTime: 1626144710.50901
+asMultiple: FALSE
+asStatic: FALSE
