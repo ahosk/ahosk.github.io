@@ -9,7 +9,7 @@ navbar:
     - text: "Beer Study"
       href: bs.html
     - text: "Attrition Study"
-      href: as.html
+      href: AttritionCS.html
 output:
 html_document:
   theme: lux
