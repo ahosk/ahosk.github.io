@@ -83,6 +83,8 @@ bb = left_join(bb,state, by = NULL)
 head(bb,6)
 tail(bb,6)
 
+write.csv(bb,'bs.csv',row.names = FALSE)
+head(bb)
 ```
 
 # Code Chunk 4
