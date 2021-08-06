@@ -1,7 +1,4 @@
 ---
-title: "DDS CS2"
-author: "Allen Hoskins"
-date: "7/21/2021"
 output:
   html_document: default
 ---

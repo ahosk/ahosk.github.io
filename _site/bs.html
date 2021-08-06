@@ -10,11 +10,8 @@
 
 
 
-<br>
-<br>
-<br>
-<br>
-<title>Beer Study</title>
+
+<title>bs.utf8</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -253,6 +250,9 @@ $(document).ready(function () {
 <li>
   <a href="bs.html">Beer Study</a>
 </li>
+<li>
+  <a href="AttritionCS.html">Attrition Study</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -268,10 +268,7 @@ $(document).ready(function () {
 
 </div>
 
-<p><a href = 'https://allenhoskins.shinyapps.io/BeerStudyInteractive/'>Link to Interactive Beer Study</a></p>
-<br>
-<br>
-<br>
+
 <div id="intro" class="section level1">
 <h1>Intro</h1>
 <p>Mr. Doukeris and Mr. Tennenbaum, according to The Beer Institute on average the adult 21 and over consumes around 28.2 gallons of beer a year. Which equates to roughly a six pack of beer per week. During my analysis of the brewery data, I have found that on average each state has 11 breweries With the exception of California, Colorado, Michigan, Texas, and Oregon which contain over 28 breweries each. Colorado not only contains the most breweries with 47 total but also the biggest ABV at 12.8% while Oregon has the most bitter at 138 IBU which ranges from 0 to 140. We suggest that adding an additional breweries to Arizona, South Carolina, Indiana, and Maine would greatly impact beer sales to combat the ever growing microbrewery influx. According to the Associated Press, these states have seen the least amount of population decline of the the last year. Additions to California, Georgia, New York and Texas would also be beneficial due those states having a low brewery per 100k, with populations over 28mm people. While Texas and California have some of the highest number of breweries in total, they average less than .5 breweries per 100k. IPA’s and Ale’s consist of more 60% of the beers and continue to rise are the most common consumed beer in the United States. Additions of higher ABV beers such as IPAs to the Western and Southern Regions and additions of lower IBU beers such as Ales in the North Central and Northeast would increase sales as these align with the current selection in the area.</p>
@@ -282,16 +279,32 @@ $(document).ready(function () {
 <div id="reading-in-data-from-supplied-csv-files" class="section level2">
 <h2>Reading in Data from supplied CSV files</h2>
 <pre class="r"><code>library(tidyr)
-library(tidyverse)
-library(magrittr)
-library(dplyr)
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.3     ✓ dplyr   1.0.6
+## ✓ tibble  3.1.1     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1
+## ✓ purrr   0.3.4</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(magrittr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;magrittr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     set_names</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<pre class="r"><code>library(dplyr)
 library(readr)
 library(knitr)
 
 #reading in data
 beers = read_csv(&#39;~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Beers.csv&#39;)</code></pre>
 <pre><code>## 
-## ── Column specification ─────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Name = col_character(),
 ##   Beer_ID = col_double(),
@@ -303,7 +316,7 @@ beers = read_csv(&#39;~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Sci
 ## )</code></pre>
 <pre class="r"><code>breweries = read_csv(&#39;~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Science-Master/Unit 8 and 9 Case Study 1/Breweries.csv&#39;)</code></pre>
 <pre><code>## 
-## ── Column specification ─────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Brew_ID = col_double(),
 ##   Name = col_character(),
@@ -312,14 +325,14 @@ beers = read_csv(&#39;~/Desktop/MSDS/Doing Data Science/MSDS_6306_Doing-Data-Sci
 ## )</code></pre>
 <pre class="r"><code>head(beers)</code></pre>
 <pre><code>## # A tibble: 6 x 7
-##   Name                Beer_ID   ABV   IBU Brewery_id Style                          Ounces
-##   &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt;
-## 1 Pub Beer               1436 0.05     NA        409 American Pale Lager                12
-## 2 Devil&#39;s Cup            2265 0.066    NA        178 American Pale Ale (APA)            12
-## 3 Rise of the Phoenix    2264 0.071    NA        178 American IPA                       12
-## 4 Sinister               2263 0.09     NA        178 American Double / Imperial IPA     12
-## 5 Sex and Candy          2262 0.075    NA        178 American IPA                       12
-## 6 Black Exodus           2261 0.077    NA        178 Oatmeal Stout                      12</code></pre>
+##   Name             Beer_ID   ABV   IBU Brewery_id Style                   Ounces
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;                    &lt;dbl&gt;
+## 1 Pub Beer            1436 0.05     NA        409 American Pale Lager         12
+## 2 Devil&#39;s Cup         2265 0.066    NA        178 American Pale Ale (APA)     12
+## 3 Rise of the Pho…    2264 0.071    NA        178 American IPA                12
+## 4 Sinister            2263 0.09     NA        178 American Double / Impe…     12
+## 5 Sex and Candy       2262 0.075    NA        178 American IPA                12
+## 6 Black Exodus        2261 0.077    NA        178 Oatmeal Stout               12</code></pre>
 <pre class="r"><code>head(breweries)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##   Brew_ID Name                      City          State
@@ -414,26 +427,38 @@ bb = left_join(bb,state, by = NULL)</code></pre>
 <pre class="r"><code>#print first and last 6 rows in data set
 head(bb,6)</code></pre>
 <pre><code>## # A tibble: 6 x 13
-##   Brew_ID Brewery_Name  City   State Beer_Name  Beer_ID   ABV   IBU Style    Ounces State_Name Region
-##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;fct&gt; 
-## 1       1 NorthGate Br… Minne… MN    Get Toget…    2692 0.045    50 America…     16 minnesota  North…
-## 2       1 NorthGate Br… Minne… MN    Maggie&#39;s …    2691 0.049    26 Milk / …     16 minnesota  North…
-## 3       1 NorthGate Br… Minne… MN    Wall&#39;s End    2690 0.048    19 English…     16 minnesota  North…
-## 4       1 NorthGate Br… Minne… MN    Pumpion       2689 0.06     38 Pumpkin…     16 minnesota  North…
-## 5       1 NorthGate Br… Minne… MN    Stronghold    2688 0.06     25 America…     16 minnesota  North…
-## 6       1 NorthGate Br… Minne… MN    Parapet E…    2687 0.056    47 Extra S…     16 minnesota  North…
-## # … with 1 more variable: Division &lt;fct&gt;</code></pre>
+##   Brew_ID Brewery_Name  City  State Beer_Name Beer_ID   ABV   IBU Style   Ounces
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1       1 NorthGate Br… Minn… MN    Get Toge…    2692 0.045    50 Americ…     16
+## 2       1 NorthGate Br… Minn… MN    Maggie&#39;s…    2691 0.049    26 Milk /…     16
+## 3       1 NorthGate Br… Minn… MN    Wall&#39;s E…    2690 0.048    19 Englis…     16
+## 4       1 NorthGate Br… Minn… MN    Pumpion      2689 0.06     38 Pumpki…     16
+## 5       1 NorthGate Br… Minn… MN    Strongho…    2688 0.06     25 Americ…     16
+## 6       1 NorthGate Br… Minn… MN    Parapet …    2687 0.056    47 Extra …     16
+## # … with 3 more variables: State_Name &lt;chr&gt;, Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 <pre class="r"><code>tail(bb,6)</code></pre>
 <pre><code>## # A tibble: 6 x 13
-##   Brew_ID Brewery_Name   City   State Beer_Name   Beer_ID   ABV   IBU Style  Ounces State_Name Region
-##     &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;fct&gt; 
-## 1     556 Ukiah Brewing… Ukiah  CA    Pilsner Uk…      98 0.055    NA Germa…     12 california West  
-## 2     557 Butternuts Be… Garra… NY    Heinniewei…      52 0.049    NA Hefew…     12 new york   North…
-## 3     557 Butternuts Be… Garra… NY    Snapperhea…      51 0.068    NA Ameri…     12 new york   North…
-## 4     557 Butternuts Be… Garra… NY    Moo Thunde…      50 0.049    NA Milk …     12 new york   North…
-## 5     557 Butternuts Be… Garra… NY    Porkslap P…      49 0.043    NA Ameri…     12 new york   North…
-## 6     558 Sleeping Lady… Ancho… AK    Urban Wild…      30 0.049    NA Engli…     12 alaska     West  
-## # … with 1 more variable: Division &lt;fct&gt;</code></pre>
+##   Brew_ID Brewery_Name  City   State Beer_Name  Beer_ID   ABV   IBU Style Ounces
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1     556 Ukiah Brewin… Ukiah  CA    Pilsner U…      98 0.055    NA Germ…     12
+## 2     557 Butternuts B… Garra… NY    Heinniewe…      52 0.049    NA Hefe…     12
+## 3     557 Butternuts B… Garra… NY    Snapperhe…      51 0.068    NA Amer…     12
+## 4     557 Butternuts B… Garra… NY    Moo Thund…      50 0.049    NA Milk…     12
+## 5     557 Butternuts B… Garra… NY    Porkslap …      49 0.043    NA Amer…     12
+## 6     558 Sleeping Lad… Ancho… AK    Urban Wil…      30 0.049    NA Engl…     12
+## # … with 3 more variables: State_Name &lt;chr&gt;, Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
+<pre class="r"><code>write.csv(bb,&#39;bs.csv&#39;,row.names = FALSE)
+head(bb)</code></pre>
+<pre><code>## # A tibble: 6 x 13
+##   Brew_ID Brewery_Name  City  State Beer_Name Beer_ID   ABV   IBU Style   Ounces
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+## 1       1 NorthGate Br… Minn… MN    Get Toge…    2692 0.045    50 Americ…     16
+## 2       1 NorthGate Br… Minn… MN    Maggie&#39;s…    2691 0.049    26 Milk /…     16
+## 3       1 NorthGate Br… Minn… MN    Wall&#39;s E…    2690 0.048    19 Englis…     16
+## 4       1 NorthGate Br… Minn… MN    Pumpion      2689 0.06     38 Pumpki…     16
+## 5       1 NorthGate Br… Minn… MN    Strongho…    2688 0.06     25 Americ…     16
+## 6       1 NorthGate Br… Minn… MN    Parapet …    2687 0.056    47 Extra …     16
+## # … with 3 more variables: State_Name &lt;chr&gt;, Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 </div>
 </div>
 <div id="code-chunk-4" class="section level1">
@@ -444,10 +469,12 @@ head(bb,6)</code></pre>
 <pre class="r"><code>#missing values graph. Issues addressed in KNN classifier section
 library(naniar)
 colSums(is.na(bb))</code></pre>
-<pre><code>##      Brew_ID Brewery_Name         City        State    Beer_Name      Beer_ID          ABV 
-##            0            0            0            0            0            0           62 
-##          IBU        Style       Ounces   State_Name       Region     Division 
-##         1005            5            0            0            0            0</code></pre>
+<pre><code>##      Brew_ID Brewery_Name         City        State    Beer_Name      Beer_ID 
+##            0            0            0            0            0            0 
+##          ABV          IBU        Style       Ounces   State_Name       Region 
+##           62         1005            5            0            0            0 
+##     Division 
+##            0</code></pre>
 <pre class="r"><code>gg_miss_var(bb,show_pct = TRUE)</code></pre>
 <p><img src="bs_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
@@ -489,17 +516,17 @@ summary(bb$IBU)</code></pre>
 <pre class="r"><code>#finding record with maximum ABV
 bb[which.max(bb$ABV),]</code></pre>
 <pre><code>## # A tibble: 1 x 13
-##   Brew_ID Brewery_Name  City   State Beer_Name     Beer_ID   ABV   IBU Style Ounces State_Name Region
-##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;fct&gt; 
-## 1      52 Upslope Brew… Bould… CO    Lee Hill Ser…    2565 0.128    NA Quad…   19.2 colorado   West  
-## # … with 1 more variable: Division &lt;fct&gt;</code></pre>
+##   Brew_ID Brewery_Name  City   State Beer_Name  Beer_ID   ABV   IBU Style Ounces
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1      52 Upslope Brew… Bould… CO    Lee Hill …    2565 0.128    NA Quad…   19.2
+## # … with 3 more variables: State_Name &lt;chr&gt;, Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 <pre class="r"><code>#finding record with maximum IBU
 bb[which.max(bb$IBU),]</code></pre>
 <pre><code>## # A tibble: 1 x 13
-##   Brew_ID Brewery_Name   City   State Beer_Name  Beer_ID   ABV   IBU Style   Ounces State_Name Region
-##     &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;      &lt;fct&gt; 
-## 1     375 Astoria Brewi… Astor… OR    Bitter Bi…     980 0.082   138 Americ…     12 oregon     West  
-## # … with 1 more variable: Division &lt;fct&gt;</code></pre>
+##   Brew_ID Brewery_Name  City   State Beer_Name Beer_ID   ABV   IBU Style  Ounces
+##     &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+## 1     375 Astoria Brew… Astor… OR    Bitter B…     980 0.082   138 Ameri…     12
+## # … with 3 more variables: State_Name &lt;chr&gt;, Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 </div>
 </div>
 <div id="code-chunk-7" class="section level1">
@@ -550,8 +577,14 @@ bb %&gt;%
 <h2>The below code filters the overall data set to only IPAs and Ales as well as imputes median values based on the style of the beer. We then created a KNN model to predict if a beer is an IPA or Ale based on IBU and ABV.</h2>
 <p>Using a KNN model, we were able to predict the style of beer with a 90.74% accuracy.</p>
 <pre class="r"><code>library(class)
-library(caret)
-library(e1071)
+library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## 
+## Attaching package: &#39;caret&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     lift</code></pre>
+<pre class="r"><code>library(e1071)
 
 set.seed(25)
 #Filter down to Ale&#39;s and IPA&#39;s
@@ -740,10 +773,25 @@ table(classification,bb_knn$IPA_Ale)</code></pre>
 <div id="code-chunk-12" class="section level1">
 <h1>Code Chunk 12</h1>
 <p>In the below code, we join to another US data set to plot a US heat map of the brewery count by state for easy analysis.</p>
-<pre class="r"><code>library(maps)
-library(plotly)
-
-#create heat map of breweries per state
+<pre class="r"><code>library(maps)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;maps&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     map</code></pre>
+<pre class="r"><code>library(plotly)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<pre class="r"><code>#create heat map of breweries per state
 
 states_map = map_data(&quot;state&quot;)
 names(states_map)[5] = &#39;State_Name&#39;
@@ -753,34 +801,34 @@ states_map = left_join(states_map,state,by=NULL)</code></pre>
 <pre><code>## Joining, by = &quot;State&quot;</code></pre>
 <pre class="r"><code>states_map</code></pre>
 <pre><code>## # A tibble: 223,088 x 12
-##    Brew_ID Brewery_Name  City    State  long   lat group order State_Name subregion Region  Division 
-##      &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;fct&gt;   &lt;fct&gt;    
-##  1       1 NorthGate Br… Minnea… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;      North … West Nor…
-##  2       1 NorthGate Br… Minnea… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;      North … West Nor…
-##  3       1 NorthGate Br… Minnea… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;      North … West Nor…
-##  4       1 NorthGate Br… Minnea… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;      North … West Nor…
-##  5       1 NorthGate Br… Minnea… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;      North … West Nor…
-##  6       1 NorthGate Br… Minnea… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;      North … West Nor…
-##  7       1 NorthGate Br… Minnea… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;      North … West Nor…
-##  8       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;      North … West Nor…
-##  9       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;      North … West Nor…
-## 10       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;      North … West Nor…
-## # … with 223,078 more rows</code></pre>
+##    Brew_ID Brewery_Name City  State  long   lat group order State_Name subregion
+##      &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;    
+##  1       1 NorthGate B… Minn… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;     
+##  2       1 NorthGate B… Minn… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;     
+##  3       1 NorthGate B… Minn… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;     
+##  4       1 NorthGate B… Minn… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;     
+##  5       1 NorthGate B… Minn… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;     
+##  6       1 NorthGate B… Minn… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;     
+##  7       1 NorthGate B… Minn… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;     
+##  8       1 NorthGate B… Minn… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;     
+##  9       1 NorthGate B… Minn… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;     
+## 10       1 NorthGate B… Minn… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;     
+## # … with 223,078 more rows, and 2 more variables: Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 <pre class="r"><code>states_map</code></pre>
 <pre><code>## # A tibble: 223,088 x 12
-##    Brew_ID Brewery_Name  City    State  long   lat group order State_Name subregion Region  Division 
-##      &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;fct&gt;   &lt;fct&gt;    
-##  1       1 NorthGate Br… Minnea… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;      North … West Nor…
-##  2       1 NorthGate Br… Minnea… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;      North … West Nor…
-##  3       1 NorthGate Br… Minnea… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;      North … West Nor…
-##  4       1 NorthGate Br… Minnea… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;      North … West Nor…
-##  5       1 NorthGate Br… Minnea… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;      North … West Nor…
-##  6       1 NorthGate Br… Minnea… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;      North … West Nor…
-##  7       1 NorthGate Br… Minnea… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;      North … West Nor…
-##  8       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;      North … West Nor…
-##  9       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;      North … West Nor…
-## 10       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;      North … West Nor…
-## # … with 223,078 more rows</code></pre>
+##    Brew_ID Brewery_Name City  State  long   lat group order State_Name subregion
+##      &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;    
+##  1       1 NorthGate B… Minn… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;     
+##  2       1 NorthGate B… Minn… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;     
+##  3       1 NorthGate B… Minn… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;     
+##  4       1 NorthGate B… Minn… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;     
+##  5       1 NorthGate B… Minn… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;     
+##  6       1 NorthGate B… Minn… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;     
+##  7       1 NorthGate B… Minn… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;     
+##  8       1 NorthGate B… Minn… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;     
+##  9       1 NorthGate B… Minn… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;     
+## 10       1 NorthGate B… Minn… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;     
+## # … with 223,078 more rows, and 2 more variables: Region &lt;fct&gt;, Division &lt;fct&gt;</code></pre>
 <pre class="r"><code>state_heat = left_join(state,brew_cnt, by = NULL)</code></pre>
 <pre><code>## Joining, by = &quot;State&quot;</code></pre>
 <pre class="r"><code>#merging brewery count to map data
@@ -788,19 +836,20 @@ states_map = left_join(states_map,state_heat,by= NULL)</code></pre>
 <pre><code>## Joining, by = c(&quot;State&quot;, &quot;State_Name&quot;, &quot;Region&quot;, &quot;Division&quot;)</code></pre>
 <pre class="r"><code>states_map</code></pre>
 <pre><code>## # A tibble: 227,616 x 13
-##    Brew_ID Brewery_Name  City    State  long   lat group order State_Name subregion Region  Division 
-##      &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;fct&gt;   &lt;fct&gt;    
-##  1       1 NorthGate Br… Minnea… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;      North … West Nor…
-##  2       1 NorthGate Br… Minnea… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;      North … West Nor…
-##  3       1 NorthGate Br… Minnea… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;      North … West Nor…
-##  4       1 NorthGate Br… Minnea… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;      North … West Nor…
-##  5       1 NorthGate Br… Minnea… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;      North … West Nor…
-##  6       1 NorthGate Br… Minnea… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;      North … West Nor…
-##  7       1 NorthGate Br… Minnea… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;      North … West Nor…
-##  8       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;      North … West Nor…
-##  9       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;      North … West Nor…
-## 10       1 NorthGate Br… Minnea… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;      North … West Nor…
-## # … with 227,606 more rows, and 1 more variable: Brewery_Count &lt;int&gt;</code></pre>
+##    Brew_ID Brewery_Name City  State  long   lat group order State_Name subregion
+##      &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;    
+##  1       1 NorthGate B… Minn… MN    -96.4  43.5    25  7047 minnesota  &lt;NA&gt;     
+##  2       1 NorthGate B… Minn… MN    -96.4  43.9    25  7048 minnesota  &lt;NA&gt;     
+##  3       1 NorthGate B… Minn… MN    -96.4  44.2    25  7049 minnesota  &lt;NA&gt;     
+##  4       1 NorthGate B… Minn… MN    -96.4  44.5    25  7050 minnesota  &lt;NA&gt;     
+##  5       1 NorthGate B… Minn… MN    -96.4  44.6    25  7051 minnesota  &lt;NA&gt;     
+##  6       1 NorthGate B… Minn… MN    -96.4  44.8    25  7052 minnesota  &lt;NA&gt;     
+##  7       1 NorthGate B… Minn… MN    -96.4  45.0    25  7053 minnesota  &lt;NA&gt;     
+##  8       1 NorthGate B… Minn… MN    -96.4  45.3    25  7054 minnesota  &lt;NA&gt;     
+##  9       1 NorthGate B… Minn… MN    -96.4  45.3    25  7055 minnesota  &lt;NA&gt;     
+## 10       1 NorthGate B… Minn… MN    -96.4  45.3    25  7056 minnesota  &lt;NA&gt;     
+## # … with 227,606 more rows, and 3 more variables: Region &lt;fct&gt;, Division &lt;fct&gt;,
+## #   Brewery_Count &lt;int&gt;</code></pre>
 <pre class="r"><code>states_map %&gt;%
    ggplot(aes(x=long,y=lat,group=group))+
    geom_polygon(aes(fill = Brewery_Count))+
